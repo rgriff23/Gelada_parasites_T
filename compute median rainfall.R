@@ -22,6 +22,9 @@ for (i in 1:nrow(data)) {
 	} else {data$Rain_median_30days[i] = NA}
 }
 
+# add temperature midpoint
+data$Temp_midpoint <- (data$Temp_max + data$Temp_min)/2 
+
 # export
 write.csv(data, file="~/Desktop/GitHub/Gelada_parasites_T/data.csv", row.names=FALSE)
 
