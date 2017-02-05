@@ -14,30 +14,31 @@ data <- read.csv("~/Desktop/GitHub/Gelada_parasites_T/data.csv")
 ###################
 
 # Cut non adults
-data <- data[data$Status != "NonA",]
+#data <- data[data$Status != "NonA",]
 
 # Center age (mean age is 10.6 years)
-data$Age <- data$Age - mean(data$Age)
+#data$Age <- data$Age - mean(data$Age)
 
 # Center temperature (midpoint is 13 degrees C)
-data$Temp_midpoint <- data$Temp_midpoint - mean(data$Temp_midpoint)
+#data$Temp_midpoint <- data$Temp_midpoint - mean(data$Temp_midpoint)
 
 # New leadership variable
-data$Leader <- ifelse(data$Status=="L", 1, 0)
+#data$Leader <- ifelse(data$Status=="L", 1, 0)
 
 # Export
-write.csv(data, file="~/Desktop/GitHub/Gelada_parasites_T/data.csv", row.names=F)
+#write.csv(data, file="~/Desktop/GitHub/Gelada_parasites_T/data.csv", row.names=F)
 
 ###########
 # MODELS #
 #########
 
 # Subset data and remove NAs
-data_sub <- data[,c("Z_t", "Cyst", "Age", "Status", "Z_gc", "Temp_midpoint", "Rain_median_30days", "Name")]
+data_sub <- data[,c("Z_t", "Cyst", "Age", "Leader", "Z_gc", "Temp_midpoint", "Rain_median_30days", "Name")]
 data_sub <- data_sub[complete.cases(data_sub),]
 
 # GLMM
-mod <- lmer(Z_t ~ Cyst * Age * Z_gc + Temp_midpoint * Rain_median_30days + (1|Name), data=data_sub, na.action=na.fail)
+mod <- lmer(Z_t ~ (Cyst + Age + Leader + Z_gc + Temp_midpoint + Rain_median_30days)^2 + (1|Name), data=data_sub, na.action=na.fail)
+summary(mod)
 dredge1 <- dredge(mod)
 model.ave(dredge1)
 
