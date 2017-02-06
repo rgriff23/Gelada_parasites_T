@@ -40,5 +40,14 @@ data_sub <- data_sub[complete.cases(data_sub),]
 mod <- lmer(Z_t ~ (Cyst + Age + Leader + Z_gc + Temp_midpoint + Rain_median_30days)^2 + (1|Name), data=data_sub, na.action=na.fail)
 summary(mod)
 dredge1 <- dredge(mod)
-model.ave(dredge1)
 
+# view top models (within 2 AICc of top model)
+get.models(dredge1, subset=delta<2)
+
+# model averaging
+mod.average <- model.avg(get.models(dredge1, subset=delta<2))
+summary(mod.average)
+
+########
+# END #
+######
