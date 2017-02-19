@@ -51,3 +51,10 @@ summary(mod.average)
 ########
 # END #
 ######
+
+# Look at males with cysts, sort by name and date
+data$Date <- as.Date(data$Date, format="%m/%d/%y")
+cystmales <- data[data$Cyst==1,c("Name", "Date", "Status")]
+cystmales <- cystmales[order(cystmales$Name, cystmales$Date),]
+cystmales
+
